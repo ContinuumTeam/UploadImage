@@ -1,12 +1,14 @@
 import express from 'express'
+import routes from './routes'
+import morgan from 'morgan'
 
 const app = express()
+app.use(express.json())
 
-app.get('/', (req, res)=>{
+app.use(express.urlencoded({ extended: true }))
 
-  console.log('server rodando');
-  
+app.use(morgan('dev'))
 
-  return res.json({message: "hello world"})
-})
+app.use(routes)
+
 app.listen(3333)
