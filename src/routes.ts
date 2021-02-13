@@ -5,8 +5,9 @@ import multerConfig from './config/multer'
 const routes = Router()
 
 routes.post(
-  '/', multer().single('file'), (req, res)=>{
-
+  '/posts', multer(multerConfig).single('file'), (req, res)=>{
+    console.log(req.file);
+    
     return res.json({message: "hello world"})
 
   }

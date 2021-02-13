@@ -1,14 +1,23 @@
 import multer from 'multer'
 import path from 'path'
-import crypto from 'crypto'
 
 export default {
-  dest: path.resolve(__dirname, '..', '..', 'temp', 'uploads'),
-  storage: multer.diskStorage({}),
+  dest: path.join(__dirname, "..", "..", "upload"),
+  storage: multer.diskStorage({
+    destination: (req, file, call) =>{
+      call(null, path.join(__dirname,"..", "..", "upload"))
+    },
+    filename: (req, file, call) =>{
+
+      const fileName = `${Date.now()}-${file.originalname}`
+      call(null, fileName)
+
+    }
+  }),
   limits:{
-    fileSize: 2 * 1024 +1024
+    fileSize: 2 * 1024 * 1024
   },
-  fileFilter: (req: any, file: any, call: any) => {
+  fileFilter: (req, file, call) => {
     const allowedMimes = [
       "image/jpeg",
       "image/pjpeg",
@@ -22,9 +31,4 @@ export default {
       call(new Error("invalid file"))
     }
   },
-  filename: (request: any, file: any, cb: any) =>{
-      const fileName = `${Date.now()}-${file.originalname}`
-
-      cb(null, fileName)
-  }
 }
